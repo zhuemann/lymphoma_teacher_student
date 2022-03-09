@@ -24,8 +24,8 @@ if __name__ == '__main__':
     accuracy_list = []
 
     for seed in seeds:
-        teacher_student_train(seed=seed, batch_size=16, epoch=1, dir_base=directory_base, n_classes=5)
-        acc, matrix = train_vision_model(seed=seed, batch_size=16, epoch=1, dir_base=directory_base, n_classes=5)
+        teacher_student_train(seed=seed, batch_size=8, epoch=1, dir_base=directory_base, n_classes=5)
+        acc, matrix = train_vision_model(seed=seed, batch_size=8, epoch=1, dir_base=directory_base, n_classes=5)
 
         accuracy_list.append(acc)
         df = pd.DataFrame(matrix)
