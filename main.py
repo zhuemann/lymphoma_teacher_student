@@ -4,6 +4,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 from teacher_student_train import teacher_student_train
+from train_vision_model import train_vision_model
 
 
 
@@ -20,6 +21,7 @@ if __name__ == '__main__':
     seeds = [1]
 
     for seed in seeds:
-        acc, matrix = teacher_student_train(seed=seed, batch_size=3, epoch=100, dir_base=directory_base, n_classes=5)
+        acc, matrix = teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
+        acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=100, dir_base=directory_base, n_classes=5)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

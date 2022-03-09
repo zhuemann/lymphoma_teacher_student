@@ -18,8 +18,9 @@ from BertBase import BERTClass
 from VitBase import ViTBase16
 from efficientnet_pytorch import EfficientNet
 from dataloader_text_image import TextImageDataset
+from vision_model import Vision_Model
 
-def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb-isilon/research/Bradshaw/",
+def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb-isilon/research/Bradshaw/",
                               n_classes=2):
     # model specific global variables
     # IMG_SIZE = 224
@@ -184,8 +185,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # creates the vit model which gets passed to the multimodal model class
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
-
-    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=768)  # num_classes=2
+    #vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
 
     # creates the language model which gets passed to the multimodal model class
     language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=1024)
@@ -232,6 +233,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             images = data['images'].to(device)
 
             outputs = model_obj(images)
+            print(outputs.size())
 
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())

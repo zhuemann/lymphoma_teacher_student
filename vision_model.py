@@ -3,19 +3,17 @@ import os
 import torch
 from efficientnet_pytorch import EfficientNet
 
-class ViTBase16(nn.Module):
+class Vision_Model(nn.Module):
     def __init__(self, n_classes, pretrained=False, dir_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"):
 
-        super(ViTBase16, self).__init__()
+        super(Vision_Model, self).__init__()
 
         self.model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=768)
+        self.classifier = nn.Linear(768, n_classes)
 
         pretrained = True
         if pretrained:
-           # MODEL_PATH = ("C:/Users/zmh001/Documents/vit_model/jx_vit_base_p16_224-80ecf9dd.pth/jx_vit_base_p16_224-80ecf9dd.pth")
-            #MODEL_PATH = ('/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/vit_model/jx_vit_base_p16_224-80ecf9dd.pth/jx_vit_base_p16_224-80ecf9dd.pth')
-            #model_path = os.path.join(dir_base, 'Zach_Analysis/vit_model/jx_vit_base_p16_224-80ecf9dd.pth/jx_vit_base_p16_224-80ecf9dd.pth')
-            model_path = os.path.join(dir_base, 'Zach_Analysis/vit_model/jx_vit_base_p32_384-830016f5.pth')
+            model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
             self.model.load_state_dict(torch.load(model_path))
             print("is using the wieghts stored at this location")
         else:
@@ -26,4 +24,5 @@ class ViTBase16(nn.Module):
 
     def forward(self, x):
         x = self.model(x)
-        return x
+        output = self.classifier(x)
+        return output
