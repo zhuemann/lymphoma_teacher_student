@@ -195,9 +195,11 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     #    param.requires_grad = False
 
     for index, param in enumerate(vis_model.parameters()):
-        print(param.size())
-        param.requires_grad = True
-        print(index)
+        #print(param.size())
+        param.requires_grad = False
+        #print(index)
+        if index == 214:
+            param.require_grad = True
 
 
 
@@ -223,11 +225,11 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
         fin_outputs = []
         confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
-        if epoch > 25:
-            for param in model_obj.parameters():
-                param.requires_grad = True
-            for learning_rate in optimizer.param_groups:
-                learning_rate['lr'] = 5e-6  # 1e-6 for roberta
+        #if epoch > 25:
+        #    for param in model_obj.parameters():
+        #        param.requires_grad = True
+        #    for learning_rate in optimizer.param_groups:
+        #        learning_rate['lr'] = 5e-6  # 1e-6 for roberta
 
         for _, data in tqdm(enumerate(training_loader, 0)):
             ids = data['ids'].to(device, dtype=torch.long)
@@ -288,7 +290,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
                 targets = data['targets'].to(device, dtype=torch.long)
                 images = data['images'].to(device)
 
-                outputs = model_obj(ids, mask, token_type_ids, images)
+                outputs = model_obj(images)
 
                 fin_targets.extend(targets.cpu().detach().numpy().tolist())
                 fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
@@ -343,7 +345,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             targets = data['targets'].to(device, dtype=torch.long)
             images = data['images'].to(device)
 
-            outputs = model_obj(ids, mask, token_type_ids, images)
+            outputs = model_obj(images)
             row_ids.extend(data['row_ids'])
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
