@@ -238,7 +238,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             # loss = loss_fn(outputs[:, 0], targets)
             # loss = criterion(outputs, targets)
             loss = criterion(vis_outputs, lang_outputs)
-            print(loss)
+            #print(loss)
             if _ % 50 == 0:
                 print(f'Epoch: {epoch}, Loss:  {loss.item()}')
 
