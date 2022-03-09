@@ -214,9 +214,15 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     for epoch in range(1, N_EPOCHS + 1):
         model_obj.train()
         gc.collect()
-        #fin_targets = []
-        #fin_outputs = []
-        #confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+        fin_targets = []
+        fin_outputs = []
+        confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+
+        if epoch > 25:
+            for param in model_obj.parameters():
+                param.requires_grad = True
+            for learning_rate in optimizer.param_groups:
+                learning_rate['lr'] = 5e-6  # 1e-6 for roberta
 
         for _, data in tqdm(enumerate(training_loader, 0)):
             ids = data['ids'].to(device, dtype=torch.long)
@@ -225,20 +231,16 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             targets = data['targets'].to(device, dtype=torch.long)
             images = data['images'].to(device)
 
-            lang_outputs = language_model(ids, mask, token_type_ids)
-            vis_outputs = model_obj(images)
+            outputs = model_obj(images)
 
-            #fin_targets.extend(targets.cpu().detach().numpy().tolist())
-            #fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
+            fin_targets.extend(targets.cpu().detach().numpy().tolist())
+            fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
             # fin_outputs.extend(outputs.cpu().detach().numpy().tolist())
             # targets = torch.nn.functional.one_hot(input = targets.long(), num_classes = n_classes)
 
-
             optimizer.zero_grad()
             # loss = loss_fn(outputs[:, 0], targets)
-            # loss = criterion(outputs, targets)
-            loss = criterion(vis_outputs, lang_outputs)
-            #print(loss)
+            loss = criterion(outputs, targets)
             if _ % 50 == 0:
                 print(f'Epoch: {epoch}, Loss:  {loss.item()}')
 
@@ -246,20 +248,25 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             loss.backward()
             optimizer.step()
 
+            for i in range(0, outputs.shape[0]):
+                actual = targets[i].detach().cpu().data.numpy()
+                predicted = outputs.argmax(dim=1)[i].detach().cpu().data.numpy()
+                confusion_matrix[predicted][actual] += 1
+
         # get the final score
         # if N_CLASS > 2:
-        #final_outputs = np.copy(fin_outputs)
+        final_outputs = np.copy(fin_outputs)
         # final_outputs = np.round(final_outputs, decimals=0)
         # final_outputs = (final_outputs == final_outputs.max(axis=1)[:,None]).astype(int)
-        #final_outputs = np.argmax(final_outputs, axis=1)
+        final_outputs = np.argmax(final_outputs, axis=1)
         # else:
         #    final_outputs = np.array(fin_outputs) > 0.5
 
         # print(final_outputs.tolist())
         # print(fin_targets)
-        #accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
-        #print(f"Train Accuracy = {accuracy}")
-        #print(confusion_matrix)
+        accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
+        print(f"Train Accuracy = {accuracy}")
+        print(confusion_matrix)
 
         # each epoch, look at validation data
         model_obj.eval()
@@ -267,11 +274,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         fin_outputs = []
         confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
-    save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
-    # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
-    torch.save(model_obj.state_dict(), save_path)
-
-    for epoch in range(1, N_EPOCHS + 1):
         with torch.no_grad():
             gc.collect()
             for _, data in tqdm(enumerate(valid_loader, 0)):
