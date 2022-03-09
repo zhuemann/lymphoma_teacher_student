@@ -228,8 +228,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             lang_outputs = language_model(ids, mask, token_type_ids)
             vis_outputs = model_obj(images)
 
-            print(lang_outputs.size())
-            print(vis_outputs.size())
             #fin_targets.extend(targets.cpu().detach().numpy().tolist())
             #fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
             # fin_outputs.extend(outputs.cpu().detach().numpy().tolist())
@@ -269,6 +267,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         fin_outputs = []
         confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
+    for epoch in range(1, N_EPOCHS + 1):
         with torch.no_grad():
             gc.collect()
             for _, data in tqdm(enumerate(valid_loader, 0)):
