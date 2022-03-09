@@ -190,7 +190,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     if dir_base == "Z:/":
         vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
     else:
-        vis_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+        vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
 
     # creates the language model which gets passed to the multimodal model class
@@ -259,10 +259,12 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
+            #print(outputs.shape[0])
             for i in range(0, outputs.shape[0]):
                 actual = targets[i].detach().cpu().data.numpy()
                 predicted = outputs.argmax(dim=1)[i].detach().cpu().data.numpy()
+                #print(actual)
+                #print(predicted)
                 confusion_matrix[predicted][actual] += 1
 
         # get the final score
