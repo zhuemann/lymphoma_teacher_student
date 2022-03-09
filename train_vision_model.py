@@ -185,12 +185,12 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     # creates the vit model which gets passed to the multimodal model class
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
-    #vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+    vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
-    if dir_base == "Z:/":
-        vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
-    else:
-        vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+    #if dir_base == "Z:/":
+    #    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
+    #else:
+    #    vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
 
     # creates the language model which gets passed to the multimodal model class
