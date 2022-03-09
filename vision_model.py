@@ -4,12 +4,12 @@ import torch
 from efficientnet_pytorch import EfficientNet
 
 class Vision_Model(nn.Module):
-    def __init__(self, n_classes, pretrained=False, dir_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"):
+    def __init__(self, n_classes=5,n_latient=768, pretrained=False, dir_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"):
 
         super(Vision_Model, self).__init__()
 
-        self.model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=1024)
-        self.classifier = nn.Linear(1024, n_classes)
+        self.model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=n_latient)
+        self.classifier = nn.Linear(n_latient, n_classes)
 
         pretrained = True
         if pretrained:
