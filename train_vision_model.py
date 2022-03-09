@@ -190,7 +190,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/efficientnet-b7')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
     #torch.save(vis_model.state_dict(), save_path)
-    model = EfficientNet.from_name('efficientnet-b7')
+    model = EfficientNet.from_name('efficientnet-b7', num_classes=5)
     vis_model = model.load_state_dict(torch.load(model_path))
 
     #if dir_base == "Z:/":
