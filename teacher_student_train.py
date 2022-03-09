@@ -26,7 +26,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     IMG_SIZE = 384
     # IMG_SIZE = 600
     BATCH_SIZE = batch_size
-    LR = 1e-7 #8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
+    LR = 8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
     GAMMA = 0.7
     N_EPOCHS = epoch  # 8
     N_CLASS = n_classes
