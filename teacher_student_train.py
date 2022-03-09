@@ -11,6 +11,7 @@ from sklearn import model_selection
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 import pandas as pd
 from sklearn import metrics
+from torch.optim.lr_scheduler import MultiStepLR
 
 from util import compute_metrics, hamming_score, loss_fn, truncate_left_text_dataset
 from five_class_setup import five_class_image_text_label
@@ -209,6 +210,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # defines which optimizer is being used
     # print(model_obj.parameters)
     optimizer = torch.optim.Adam(params=model_obj.parameters(), lr=LR)
+    scheduler = MultiStepLR(optimizer, milestones=[1, 2, 3, 4, 5, 6, 7, 8, 9], gamma=0.8)
 
     best_acc = -1
     for epoch in range(1, N_EPOCHS + 1):
@@ -245,6 +247,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+        scheduler.step()
 
         # get the final score
         # if N_CLASS > 2:
