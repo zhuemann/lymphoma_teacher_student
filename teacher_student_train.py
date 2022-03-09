@@ -58,8 +58,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # creates the path to the roberta model used from the bradshaw drive and loads the tokenizer and roberta model
     # roberta_path = os.path.join(dir_base, 'Zach_Analysis/roberta_large/')
     # using bert for now
-    roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
-    # roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bio_clinical_bert/')
+    # roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
+    roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/roberta_pretrained_4/')
 
     tokenizer = AutoTokenizer.from_pretrained(roberta_path)
     # roberta_model = RobertaModel.from_pretrained(roberta_path)
@@ -184,8 +184,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # creates the vit model which gets passed to the multimodal model class
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
+    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=1024)  # num_classes=2
 
-    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=768)  # num_classes=2
 
     # creates the language model which gets passed to the multimodal model class
     language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=1024)
@@ -203,7 +203,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
 
     model_obj = vis_model
     model_obj.to(device)
-
 
 
     # defines which optimizer is being used
@@ -270,106 +269,3 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
     torch.save(model_obj.state_dict(), save_path)
-
-    for epoch in range(1, N_EPOCHS + 1):
-        with torch.no_grad():
-            gc.collect()
-            for _, data in tqdm(enumerate(valid_loader, 0)):
-                ids = data['ids'].to(device, dtype=torch.long)
-                mask = data['mask'].to(device, dtype=torch.long)
-                token_type_ids = data['token_type_ids'].to(device, dtype=torch.long)
-                targets = data['targets'].to(device, dtype=torch.long)
-                images = data['images'].to(device)
-
-                outputs = model_obj(ids, mask, token_type_ids, images)
-
-                fin_targets.extend(targets.cpu().detach().numpy().tolist())
-                fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
-                # fin_outputs.extend(outputs.cpu().detach().numpy().tolist())
-
-                for i in range(0, outputs.shape[0]):
-                    actual = targets[i].detach().cpu().data.numpy()
-                    predicted = outputs.argmax(dim=1)[i].detach().cpu().data.numpy()
-                    confusion_matrix[predicted][actual] += 1
-
-            # get the final score
-            # if N_CLASS > 2:
-            final_outputs = np.copy(fin_outputs)
-            # final_outputs = np.round(final_outputs, decimals=0)
-            final_outputs = np.argmax(final_outputs, axis=1)
-            # final_outputs = (final_outputs == final_outputs.max(axis=1)[:,None]).astype(int)
-            # else:
-            #    final_outputs = np.array(fin_outputs) > 0.5
-
-            # final_outputs = np.array(fin_outputs) > 0.5
-            # final_outputs = np.copy(fin_outputs)
-            # final_outputs = (final_outputs == final_outputs.max(axis=1)[:,None]).astype(int)
-            val_hamming_loss = metrics.hamming_loss(fin_targets, final_outputs)
-            val_hamming_score = hamming_score(np.array(fin_targets), np.array(final_outputs))
-
-            accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
-            print(f"valid Hamming Score = {val_hamming_score}\nValid Accuracy = {accuracy}")
-
-            print(f"Epoch {str(epoch)}, Validation Hamming Score = {val_hamming_score}")
-            print(f"Epoch {str(epoch)}, Validation Hamming Loss = {val_hamming_loss}")
-            print(confusion_matrix)
-            if accuracy >= best_acc:
-                best_acc = accuracy
-                save_path = os.path.join(dir_base, 'Zach_Analysis/models/vit/best_multimodal_modal_forked')
-                # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
-                torch.save(model_obj.state_dict(), save_path)
-
-    model_obj.eval()
-    fin_targets = []
-    fin_outputs = []
-    row_ids = []
-    confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/vit/best_multimodal_modal_forked')
-    # model_obj.load_state_dict(torch.load('/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal'))
-    model_obj.load_state_dict(torch.load(saved_path))
-
-    with torch.no_grad():
-        for _, data in tqdm(enumerate(test_loader, 0)):
-            ids = data['ids'].to(device, dtype=torch.long)
-            mask = data['mask'].to(device, dtype=torch.long)
-            token_type_ids = data['token_type_ids'].to(device, dtype=torch.long)
-            targets = data['targets'].to(device, dtype=torch.long)
-            images = data['images'].to(device)
-
-            outputs = model_obj(ids, mask, token_type_ids, images)
-            row_ids.extend(data['row_ids'])
-            fin_targets.extend(targets.cpu().detach().numpy().tolist())
-            fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
-            # fin_outputs.extend(outputs.cpu().detach().numpy().tolist())
-
-            for i in range(0, outputs.shape[0]):
-                actual = targets[i].detach().cpu().data.numpy()
-                predicted = outputs.argmax(dim=1)[i].detach().cpu().data.numpy()
-                confusion_matrix[predicted][actual] += 1
-
-        # get the final score
-        # if N_CLASS > 2:
-        final_outputs = np.copy(fin_outputs)
-        final_outputs = np.argmax(final_outputs, axis=1)
-        # final_outputs = np.round(final_outputs, decimals=0)
-        # final_outputs = (final_outputs == final_outputs.max(axis=1)[:,None]).astype(int)
-        # else:
-        #    final_outputs = np.array(fin_outputs) > 0.5
-
-        test_hamming_score = hamming_score(np.array(fin_targets), np.array(final_outputs))
-        accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
-        print(f"Test Hamming Score = {test_hamming_score}\nTest Accuracy = {accuracy}")
-        print(confusion_matrix)
-
-        return accuracy, confusion_matrix
-        # print(f"Test Hamming Score = {test_hamming_score}\nTest Accuracy = {accuracy}\n{model_type[model_selection] + save_name_extension}")
-
-        # create a dataframe of the prediction, labels, and which ones are correct
-        # if N_CLASS > 2:
-        #    df_test_vals = pd.DataFrame(list(zip(row_ids, np.argmax(fin_targets, axis=1).astype(int).tolist(), np.argmax(final_outputs, axis=1).astype(int).tolist())), columns=['id', 'label', 'prediction'])
-        # else:
-        #    df_test_vals = pd.DataFrame(list(zip(row_ids, list(map(int, fin_targets)), final_outputs[:,0].astype(int).tolist())), columns=['id', 'label', 'prediction'])
-        # df_test_vals['correct'] = df_test_vals['label'].equals(df_test_vals['prediction'])
-        # df_test_vals['correct'] = np.where( df_test_vals['label'] == df_test_vals['prediction'], 1, 0)
-        # df_test_vals = df_test_vals.sort_values('id')
-        # df_test_vals = df_test_vals.set_index('id')

@@ -18,10 +18,10 @@ if __name__ == '__main__':
         #directory_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"
         directory_base = "/UserData/"
 
-    seeds = [1]
+    seeds = [117]
 
     for seed in seeds:
-        #acc, matrix = teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
+        teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
         acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
