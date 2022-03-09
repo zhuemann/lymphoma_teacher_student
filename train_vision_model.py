@@ -186,7 +186,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
     #vis_model = Vision_Model(n_classes=N_CLASS, n_latient=768, pretrained=True, dir_base=dir_base)
-    vis_model = EfficientNet.from_pretrained('efficientnet-b7', num_classes=5)
+    vis_model = EfficientNet.from_pretrained('efficientnet-b6', num_classes=5)
     #if dir_base == "Z:/":
     #    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
     #else:
