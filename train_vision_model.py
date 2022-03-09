@@ -185,8 +185,8 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     # creates the vit model which gets passed to the multimodal model class
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
-    vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
-    #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
+    #vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
 
     # creates the language model which gets passed to the multimodal model class
     #language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=1024)
@@ -198,7 +198,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
         #print(param.size())
         param.requires_grad = True
         #print(index)
-        if index > 213:
+        if index < 3:
             param.require_grad = True
 
 
