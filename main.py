@@ -18,7 +18,7 @@ if __name__ == '__main__':
         #directory_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"
         directory_base = "/UserData/"
 
-    seeds = [117]
+    seeds = [117, 295, 714, 892, 1023]
 
     for seed in seeds:
         teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
