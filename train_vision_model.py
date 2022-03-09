@@ -151,8 +151,8 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     )
 
     # probably can delete these
-    # criterion = nn.CrossEntropyLoss()
-    criterion = nn.MSELoss()
+    criterion = nn.CrossEntropyLoss()
+    #criterion = nn.MSELoss()
     # criterion = nn.SmoothL1Loss()
     # criterion = nn.BCEWithLogitsLoss()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -185,22 +185,26 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     # creates the vit model which gets passed to the multimodal model class
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
-    #vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
-    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
+    vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+    #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
 
     # creates the language model which gets passed to the multimodal model class
-    language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=1024)
+    #language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=1024)
 
-    for param in language_model.parameters():
-        param.requires_grad = False
+    #for param in language_model.parameters():
+    #    param.requires_grad = False
 
-    for param in vis_model.parameters():
+    for index, param in enumerate(vis_model.parameters()):
+        print(param.size())
         param.requires_grad = True
+        print(index)
+
+
 
     # creates the multimodal modal from the langauge and vision model and moves it to device
     #model_obj = MyEnsemble(language_model, vit_model, n_classes=N_CLASS)
 
-    language_model.to(device)
+    #language_model.to(device)
 
     model_obj = vis_model
     model_obj.to(device)
@@ -233,7 +237,6 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             images = data['images'].to(device)
 
             outputs = model_obj(images)
-            print(outputs.size())
 
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
