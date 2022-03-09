@@ -79,17 +79,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         test_valid_df, test_size=0.5, random_state=seed, stratify=test_valid_df.label.values
     )
 
-    #print(test_df)
-    #num_0_labels = (test_df[["label"]] == 0).any(axis=1)
-    #num_1_labels = (test_df[["label"]] == 1).any(axis=1)
-    #num_2_labels = (test_df[["label"]] == 2).any(axis=1)
-    #num_3_labels = (test_df[["label"]] == 3).any(axis=1)
-    #num_4_labels = (test_df[["label"]] == 4).any(axis=1)
-    #print("num_1: " + str(num_0_labels.sum()))
-    #print("num_2: " + str(num_1_labels.sum()))
-    #print("num_3: " + str(num_2_labels.sum()))
-    #print("num_4: " + str(num_3_labels.sum()))
-    #print("num_5: " + str(num_4_labels.sum()))
 
     # save_filepath = os.path.join(dir_base, '/UserData/Zach_Analysis/Redacted_Reports/petlymph_names.xlsx')
 
@@ -109,47 +98,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         ]
     )
 
-    transforms_valid = transforms.Compose(
-        [
-            transforms.Resize((IMG_SIZE, IMG_SIZE)),
-            transforms.ToTensor(),
-            transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
-        ]
-    )
-
-    # should be able to delete these don't use the MIPDataset
-    # train_dataset = MIPSDataset(train_df, transforms=transforms_train)
-    # valid_dataset = MIPSDataset(valid_df, transforms=transforms_valid)
-    # test_dataset = MIPSDataset(test_df, transforms=transforms_valid)
-
     training_set = TextImageDataset(train_df, tokenizer, 512, mode="train", transforms=transforms_train,
                                     dir_base=dir_base)
-    valid_set = TextImageDataset(valid_df, tokenizer, 512, transforms=transforms_valid, dir_base=dir_base)
-    test_set = TextImageDataset(test_df, tokenizer, 512, transforms=transforms_valid, dir_base=dir_base)
-
-    train_loader = torch.utils.data.DataLoader(
-        dataset=training_set,
-        batch_size=BATCH_SIZE,
-        sampler=None,
-        drop_last=True,
-        num_workers=8,
-    )
-
-    valid_loader = torch.utils.data.DataLoader(
-        dataset=valid_set,
-        batch_size=BATCH_SIZE,
-        sampler=None,
-        drop_last=True,
-        num_workers=8,
-    )
-
-    test_loader = torch.utils.data.DataLoader(
-        dataset=test_set,
-        batch_size=BATCH_SIZE,
-        sampler=None,
-        drop_last=True,
-        num_workers=8,
-    )
 
     # probably can delete these
     # criterion = nn.CrossEntropyLoss()
@@ -168,20 +118,9 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
                     'num_workers': 4
                     }
 
-    test_params = {'batch_size': BATCH_SIZE,
-                   'shuffle': True,
-                   'num_workers': 4
-                   }
-
-
     # training_set = TextImageDataset(train_df, tokenizer, 512, mode="train", transforms = transforms_train, dir_base = dir_base)
     training_loader = DataLoader(training_set, **train_params)
 
-    # valid_set = TextImageDataset(valid_df, tokenizer, 512, transforms = transforms_valid, dir_base = dir_base)
-    valid_loader = DataLoader(valid_set, **test_params)
-
-    # test_set = TextImageDataset(test_df, tokenizer, 512, transforms = transforms_valid, dir_base = dir_base)
-    test_loader = DataLoader(test_set, **test_params)
 
     # creates the vit model which gets passed to the multimodal model class
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
@@ -199,9 +138,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     for param in vis_model.parameters():
         param.requires_grad = True
 
-    # creates the multimodal modal from the langauge and vision model and moves it to device
-    #model_obj = MyEnsemble(language_model, vit_model, n_classes=N_CLASS)
 
+    # creates the langauge and vision models
     language_model.to(device)
 
     model_obj = vis_model
@@ -217,9 +155,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     for epoch in range(1, N_EPOCHS + 1):
         model_obj.train()
         gc.collect()
-        #fin_targets = []
-        #fin_outputs = []
-        #confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
         for _, data in tqdm(enumerate(training_loader, 0)):
             ids = data['ids'].to(device, dtype=torch.long)
@@ -230,12 +165,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
 
             lang_outputs = language_model(ids, mask, token_type_ids)
             vis_outputs = model_obj(images)
-
-            #fin_targets.extend(targets.cpu().detach().numpy().tolist())
-            #fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
-            # fin_outputs.extend(outputs.cpu().detach().numpy().tolist())
-            # targets = torch.nn.functional.one_hot(input = targets.long(), num_classes = n_classes)
-
 
             optimizer.zero_grad()
             # loss = loss_fn(outputs[:, 0], targets)
@@ -250,27 +179,6 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             optimizer.step()
 
         scheduler.step()
-
-        # get the final score
-        # if N_CLASS > 2:
-        #final_outputs = np.copy(fin_outputs)
-        # final_outputs = np.round(final_outputs, decimals=0)
-        # final_outputs = (final_outputs == final_outputs.max(axis=1)[:,None]).astype(int)
-        #final_outputs = np.argmax(final_outputs, axis=1)
-        # else:
-        #    final_outputs = np.array(fin_outputs) > 0.5
-
-        # print(final_outputs.tolist())
-        # print(fin_targets)
-        #accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
-        #print(f"Train Accuracy = {accuracy}")
-        #print(confusion_matrix)
-
-        # each epoch, look at validation data
-        model_obj.eval()
-        fin_targets = []
-        fin_outputs = []
-        confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
 
     save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
