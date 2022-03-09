@@ -10,7 +10,7 @@ from teacher_student_train import teacher_student_train
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    local = True
+    local = False
     if local == True:
         directory_base = "Z:/"
     else:
