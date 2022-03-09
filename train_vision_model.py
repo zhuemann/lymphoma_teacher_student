@@ -198,7 +198,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
         #print(param.size())
         param.requires_grad = False
         #print(index)
-        if index == 214:
+        if index > 213:
             param.require_grad = True
 
 
