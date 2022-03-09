@@ -20,18 +20,18 @@ if __name__ == '__main__':
         #directory_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"
         directory_base = "/UserData/"
 
-    seeds = [117, 295, 714, 892, 1023]
+    seeds = [117, 295, 714, 892, 1023, 2756, 3425]
     accuracy_list = []
 
     for seed in seeds:
-        teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
-        acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
+        teacher_student_train(seed=seed, batch_size=16, epoch=40, dir_base=directory_base, n_classes=5)
+        acc, matrix = train_vision_model(seed=seed, batch_size=16, epoch=20, dir_base=directory_base, n_classes=5)
 
         accuracy_list.append(acc)
         df = pd.DataFrame(matrix)
 
         ## save to xlsx file
-        filepath = os.path.join(directory_base, '/UserData/Zach_Analysis/result_logs_teacher_student/bio_bert_10ep/confusion_matrix_seed' + str(seed) + '.xlsx')
+        filepath = os.path.join(directory_base, '/UserData/Zach_Analysis/result_logs_teacher_student/bio_bert_20ep/confusion_matrix_seed' + str(seed) + '.xlsx')
 
         df.to_excel(filepath, index=False)
 

@@ -186,7 +186,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
     #vis_model = Vision_Model(n_classes=N_CLASS, n_latient=768, pretrained=True, dir_base=dir_base)
-    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
+    #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
     #model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/efficientnet-b7')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
     #torch.save(vis_model.state_dict(), save_path)
@@ -196,7 +196,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     #if dir_base == "Z:/":
     #    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)  # num_classes=2
     #else:
-    #    vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
+    vis_model = Vision_Model(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
 
     # creates the language model which gets passed to the multimodal model class
