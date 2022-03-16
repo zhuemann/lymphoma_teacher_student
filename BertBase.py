@@ -6,8 +6,8 @@ class BERTClass(torch.nn.Module):
         self.l1 = model
         self.pre_classifier = torch.nn.Linear(n_nodes, n_nodes)
         self.dropout = torch.nn.Dropout(0.1)
-        #self.classifier = torch.nn.Linear(n_nodes, n_class)
-        self.classifier = torch.nn.Linear(n_nodes, 512)
+        self.classifier = torch.nn.Linear(n_nodes, n_class)
+        #self.classifier = torch.nn.Linear(n_nodes, 512)
         self.attention = torch.nn.Sequential(
             torch.nn.Linear(768, 512),
             torch.nn.Tanh(),
@@ -28,9 +28,9 @@ class BERTClass(torch.nn.Module):
         #pooler = self.pre_classifier(pooler)
         #pooler = torch.nn.Tanh()(pooler)
         #pooler = self.dropout(pooler)
-        #output = self.classifier(pooler)
+        output = self.classifier(pooler)
 
-        output = pooler
+        #output = pooler
         #print("language length")
         #print(output.size())
         return output
