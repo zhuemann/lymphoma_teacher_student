@@ -24,7 +24,7 @@ import ssl
 
 ssl.SSLContext.verify_mode = ssl.VerifyMode.CERT_OPTIONAL
 
-def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb-isilon/research/Bradshaw/",
+def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb-isilon/research/Bradshaw/",
                               n_classes=2):
     # model specific global variables
     # IMG_SIZE = 224
@@ -82,18 +82,6 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
         test_valid_df, test_size=0.5, random_state=seed, stratify=test_valid_df.label.values
     )
 
-    #print(test_df)
-    #num_0_labels = (test_df[["label"]] == 0).any(axis=1)
-    #num_1_labels = (test_df[["label"]] == 1).any(axis=1)
-    #num_2_labels = (test_df[["label"]] == 2).any(axis=1)
-    #num_3_labels = (test_df[["label"]] == 3).any(axis=1)
-    #num_4_labels = (test_df[["label"]] == 4).any(axis=1)
-    #print("num_1: " + str(num_0_labels.sum()))
-    #print("num_2: " + str(num_1_labels.sum()))
-    #print("num_3: " + str(num_2_labels.sum()))
-    #print("num_4: " + str(num_3_labels.sum()))
-    #print("num_5: " + str(num_4_labels.sum()))
-
     # save_filepath = os.path.join(dir_base, '/UserData/Zach_Analysis/Redacted_Reports/petlymph_names.xlsx')
 
     # test_df.to_excel(save_filepath, index=False)
@@ -119,11 +107,6 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
         ]
     )
-
-    # should be able to delete these don't use the MIPDataset
-    # train_dataset = MIPSDataset(train_df, transforms=transforms_train)
-    # valid_dataset = MIPSDataset(valid_df, transforms=transforms_valid)
-    # test_dataset = MIPSDataset(test_df, transforms=transforms_valid)
 
     training_set = TextImageDataset(train_df, tokenizer, 512, mode="train", transforms=transforms_train,
                                     dir_base=dir_base)
@@ -208,14 +191,16 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
 
 
     # creates the language model which gets passed to the multimodal model class
-    #language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=1024)
+    language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=768)
 
-    #for param in language_model.parameters():
-    #    param.requires_grad = False
+    for param in language_model.parameters():
+        param.requires_grad = True
+
+
 
     for index, param in enumerate(vis_model.parameters()):
-        print(param.size())
-        param.requires_grad = True
+        #print(param.size())
+        param.requires_grad = False
         #print(index)
         if index < 3:
             param.require_grad = True
@@ -224,9 +209,9 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
         for x, y in child.named_children():
             print(name, x)
 
-    print(vis_model)
+    #print(vis_model)
     #print(vis_model._blocks)
-    print("break")
+    #print("break")
     #for name, layer in enumerate(vis_model):
     #    if
 
@@ -235,7 +220,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
 
     #language_model.to(device)
 
-    model_obj = vis_model
+    model_obj = language_model
     model_obj.to(device)
 
 
@@ -263,9 +248,9 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             mask = data['mask'].to(device, dtype=torch.long)
             token_type_ids = data['token_type_ids'].to(device, dtype=torch.long)
             targets = data['targets'].to(device, dtype=torch.long)
-            images = data['images'].to(device)
+            #images = data['images'].to(device)
 
-            outputs = model_obj(images)
+            outputs = model_obj(ids, mask, token_type_ids)
 
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
@@ -319,7 +304,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
                 targets = data['targets'].to(device, dtype=torch.long)
                 images = data['images'].to(device)
 
-                outputs = model_obj(images)
+                outputs = model_obj(ids, mask, token_type_ids)
 
                 fin_targets.extend(targets.cpu().detach().numpy().tolist())
                 fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
@@ -353,7 +338,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             print(confusion_matrix)
             if accuracy >= best_acc:
                 best_acc = accuracy
-                save_path = os.path.join(dir_base, 'Zach_Analysis/models/vit/best_multimodal_modal_forked')
+                save_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
                 # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
                 torch.save(model_obj.state_dict(), save_path)
 
@@ -362,7 +347,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     fin_outputs = []
     row_ids = []
     confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/vit/best_multimodal_modal_forked')
+    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
     # model_obj.load_state_dict(torch.load('/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal'))
     model_obj.load_state_dict(torch.load(saved_path))
 
@@ -374,7 +359,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             targets = data['targets'].to(device, dtype=torch.long)
             images = data['images'].to(device)
 
-            outputs = model_obj(images)
+            outputs = model_obj(ids, mask, token_type_ids)
             row_ids.extend(data['row_ids'])
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class

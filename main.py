@@ -4,16 +4,17 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import pandas as pd
 import os
+import numpy as np
 
 from teacher_student_train import teacher_student_train
 from train_vision_model import train_vision_model
-
+from train_language_model import train_language_model
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    local = False
+    local = True
     if local == True:
         directory_base = "Z:/"
     else:
@@ -25,7 +26,9 @@ if __name__ == '__main__':
 
     for seed in seeds:
         #teacher_student_train(seed=seed, batch_size=3, epoch=30, dir_base=directory_base, n_classes=5)
-        acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
+        acc, matrix = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
+
+        #acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
         accuracy_list.append(acc)
         df = pd.DataFrame(matrix)
@@ -36,5 +39,7 @@ if __name__ == '__main__':
         df.to_excel(filepath, index=False)
 
         print(accuracy_list)
+    print(np.mean(np.asarray(accuracy_list)))
+    print(np.std(np.asarray(accuracy_list)))
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
