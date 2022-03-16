@@ -191,7 +191,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
 
 
     # creates the language model which gets passed to the multimodal model class
-    language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=5)
+    language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=768)
 
     for param in language_model.parameters():
         param.requires_grad = True
