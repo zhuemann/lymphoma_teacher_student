@@ -14,7 +14,7 @@ from train_language_model import train_language_model
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    local = True
+    local = False
     if local == True:
         directory_base = "Z:/"
     else:
