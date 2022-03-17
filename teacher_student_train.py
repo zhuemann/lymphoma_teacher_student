@@ -62,11 +62,11 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
     #roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bio_clinical_bert/')
     #roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/roberta_pretrained_v4/')
-    model_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
 
     tokenizer = AutoTokenizer.from_pretrained(roberta_path)
     # roberta_model = RobertaModel.from_pretrained(roberta_path)
-    roberta_model = BertModel.from_pretrained(model_path)
+    roberta_model = BertModel.from_pretrained(roberta_path)
+
 
     # takes just the last 512 tokens if there are more than 512 tokens in the text
     df = truncate_left_text_dataset(df, tokenizer)
@@ -131,7 +131,14 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
 
 
     # creates the language model which gets passed to the multimodal model class
+
+    #for param in roberta_model.paramters():
+
+
     language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=latient_layer)
+    language_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
+
+    language_model.load_state_dict(torch.load(language_path))
 
     for param in language_model.parameters():
         param.requires_grad = False

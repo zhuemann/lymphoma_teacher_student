@@ -195,10 +195,10 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
     model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/efficientnet-b0')
     #torch.save(vis_model.state_dict(), model_path)
-    model = EfficientNet.from_name('efficientnet-b0')
+    vis_model = EfficientNet.from_name('efficientnet-b0')
 
     #model.fc = nn.Linear(1000, 5)
-    vis_model = model
+    #vis_model = model
     #vis_model = model.load_state_dict(torch.load(model_path))
 
     #if dir_base == "Z:/":

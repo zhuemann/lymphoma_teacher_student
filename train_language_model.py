@@ -384,7 +384,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
         print(f"Test Hamming Score = {test_hamming_score}\nTest Accuracy = {accuracy}")
         print(confusion_matrix)
 
-        return accuracy, confusion_matrix
+        return accuracy, confusion_matrix #, model_obj
         # print(f"Test Hamming Score = {test_hamming_score}\nTest Accuracy = {accuracy}\n{model_type[model_selection] + save_name_extension}")
 
         # create a dataframe of the prediction, labels, and which ones are correct

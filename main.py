@@ -14,7 +14,7 @@ from train_language_model import train_language_model
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    local = False
+    local = True
     if local == True:
         directory_base = "Z:/"
     else:
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     for seed in seeds:
         teacher_student_train(seed=seed, batch_size=3, epoch=30, dir_base=directory_base, n_classes=5)
-        #acc, matrix = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
+        #acc, matrix, language_model = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
         #acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
