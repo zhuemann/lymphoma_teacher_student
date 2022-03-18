@@ -198,7 +198,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             optimizer.step()
 
         scheduler.step()
-        print(f"average loss: {np.asarray(np.mean(loss_list))}")
+        print(f"average loss: {np.mean(np.asarray(loss_list))}")
 
     save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
