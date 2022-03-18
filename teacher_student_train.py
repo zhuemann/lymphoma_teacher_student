@@ -188,7 +188,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             # loss = criterion(outputs, targets)
             loss = criterion(vis_outputs, lang_outputs)
 
-            loss_list.append(loss)
+            loss_list.append(loss.cpu().detach().numpy().tolist())
             #print(loss)
             if _ % 50 == 0:
                 print(f'Epoch: {epoch}, Loss:  {loss.item()}')
@@ -197,7 +197,13 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             loss.backward()
             optimizer.step()
 
+        print("list")
+        print(loss_list)
         scheduler.step()
+        test = np.asarray(loss_list)
+        print(test)
+        print(type(test))
+
         print(f"average loss: {np.mean(np.asarray(loss_list))}")
 
     save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
