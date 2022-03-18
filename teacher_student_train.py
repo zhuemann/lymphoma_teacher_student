@@ -19,6 +19,7 @@ from BertBase import BERTClass
 from VitBase import ViTBase16
 from efficientnet_pytorch import EfficientNet
 from dataloader_text_image import TextImageDataset
+from vision_model import Vision_Model
 
 import ssl
 ssl.SSLContext.verify_mode = ssl.VerifyMode.CERT_OPTIONAL
@@ -37,6 +38,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     N_CLASS = n_classes
     seed = seed
     # TOKENIZERS_PARALLELISM=True
+    ssl.SSLContext.verify_mode = ssl.VerifyMode.CERT_OPTIONAL
 
     # creates the label, text, and image names in a dataframe for 2 class
     # df = get_text_id_labels(dir_base=dir_base)
@@ -133,6 +135,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     latient_layer = 768
     #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=latient_layer)  # num_classes=2
     vis_model = EfficientNet.from_name('efficientnet-b0')
+    vis_model = Vision_Model(vis_model, n_nodes = 768)
 
     # creates the language model which gets passed to the multimodal model class
 
