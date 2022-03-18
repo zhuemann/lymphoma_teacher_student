@@ -20,6 +20,10 @@ from VitBase import ViTBase16
 from efficientnet_pytorch import EfficientNet
 from dataloader_text_image import TextImageDataset
 
+import ssl
+ssl.SSLContext.verify_mode = ssl.VerifyMode.CERT_OPTIONAL
+
+
 def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb-isilon/research/Bradshaw/",
                               n_classes=2):
     # model specific global variables
