@@ -164,7 +164,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # defines which optimizer is being used
     # print(model_obj.parameters)
     optimizer = torch.optim.Adam(params=model_obj.parameters(), lr=LR)
-    scheduler = MultiStepLR(optimizer, milestones=[1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 30], gamma=0.7)
+    scheduler = MultiStepLR(optimizer, milestones=[1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 30], gamma=0.9)
 
     best_acc = -1
     for epoch in range(1, N_EPOCHS + 1):
