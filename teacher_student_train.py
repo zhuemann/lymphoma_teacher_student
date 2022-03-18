@@ -131,8 +131,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # vit_model = ViTBase16(n_classes=N_CLASS, pretrained=True, dir_base=dir_base)
 
     latient_layer = 768
-    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=latient_layer)  # num_classes=2
-
+    #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=latient_layer)  # num_classes=2
+    vis_model = EfficientNet.from_name('efficientnet-b0')
 
     # creates the language model which gets passed to the multimodal model class
 
