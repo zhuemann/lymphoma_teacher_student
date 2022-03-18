@@ -171,7 +171,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             targets = data['targets'].to(device, dtype=torch.long)
             images = data['images'].to(device)
 
-            lang_outputs = language_model(ids, mask, token_type_ids)
+            _, lang_outputs = language_model(ids, mask, token_type_ids)
             vis_outputs = model_obj(images)
 
             optimizer.zero_grad()
