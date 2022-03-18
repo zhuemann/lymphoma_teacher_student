@@ -32,7 +32,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     IMG_SIZE = 384
     # IMG_SIZE = 600
     BATCH_SIZE = batch_size
-    LR = 1e-4 #8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
+    LR = 1e-3 #8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
     GAMMA = 0.7
     N_EPOCHS = epoch  # 8
     N_CLASS = n_classes
@@ -165,7 +165,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # print(model_obj.parameters)
     optimizer = torch.optim.Adam(params=model_obj.parameters(), lr=LR)
     #scheduler = MultiStepLR(optimizer, milestones=[1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 30], gamma=0.9)
-    scheduler = MultiStepLR(optimizer, milestones=[1, 8, 9, 15, 20, 30], gamma=0.9)
+    scheduler = MultiStepLR(optimizer, milestones=[1, 8, 9, 15, 20, 30], gamma=0.95)
 
     best_acc = -1
     for epoch in range(1, N_EPOCHS + 1):
