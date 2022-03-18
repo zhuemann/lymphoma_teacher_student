@@ -32,7 +32,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     IMG_SIZE = 384
     # IMG_SIZE = 600
     BATCH_SIZE = batch_size
-    LR = 8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
+    LR = 1e-4 #8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
     GAMMA = 0.7
     N_EPOCHS = epoch  # 8
     N_CLASS = n_classes
@@ -171,6 +171,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         model_obj.train()
         gc.collect()
 
+        loss_list = []
+
         for _, data in tqdm(enumerate(training_loader, 0)):
             ids = data['ids'].to(device, dtype=torch.long)
             mask = data['mask'].to(device, dtype=torch.long)
@@ -185,6 +187,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             # loss = loss_fn(outputs[:, 0], targets)
             # loss = criterion(outputs, targets)
             loss = criterion(vis_outputs, lang_outputs)
+
+            loss_list.append(loss)
             #print(loss)
             if _ % 50 == 0:
                 print(f'Epoch: {epoch}, Loss:  {loss.item()}')
@@ -194,6 +198,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             optimizer.step()
 
         scheduler.step()
+        print(f"average loss: {np.asarray(np.mean(loss_list))}")
 
     save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
