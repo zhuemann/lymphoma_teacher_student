@@ -197,12 +197,12 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
             loss.backward()
             optimizer.step()
 
-        print("list")
-        print(loss_list)
+        #print("list")
+        #print(loss_list)
         scheduler.step()
-        test = np.asarray(loss_list)
-        print(test)
-        print(type(test))
+        #test = np.asarray(loss_list)
+        #print(test)
+        #print(type(test))
 
         print(f"average loss: {np.mean(np.asarray(loss_list))}")
 
