@@ -338,7 +338,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
             print(confusion_matrix)
             if accuracy >= best_acc:
                 best_acc = accuracy
-                save_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
+                save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/language_teacher_model')
                 # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
                 torch.save(model_obj.state_dict(), save_path)
 
@@ -347,7 +347,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
     fin_outputs = []
     row_ids = []
     confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
+    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/language_teacher_model')
     # model_obj.load_state_dict(torch.load('/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal'))
     model_obj.load_state_dict(torch.load(saved_path))
 

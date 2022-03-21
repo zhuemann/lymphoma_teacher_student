@@ -369,7 +369,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             print(confusion_matrix)
             if accuracy >= best_acc:
                 best_acc = accuracy
-                save_path = os.path.join(dir_base, 'Zach_Analysis/models/vit/best_multimodal_modal_forked')
+                save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/best_vision_model')
                 # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
                 torch.save(model_obj.state_dict(), save_path)
 
@@ -378,7 +378,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     fin_outputs = []
     row_ids = []
     confusion_matrix = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/vit/best_multimodal_modal_forked')
+    saved_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/best_vision_model')
     # model_obj.load_state_dict(torch.load('/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal'))
     model_obj.load_state_dict(torch.load(saved_path))
 
