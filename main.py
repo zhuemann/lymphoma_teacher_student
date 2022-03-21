@@ -26,10 +26,10 @@ if __name__ == '__main__':
     seeds = [117]
 
     for seed in seeds:
-        teacher_student_train(seed=seed, batch_size=3, epoch=1000, dir_base=directory_base, n_classes=5)
+        #teacher_student_train(seed=seed, batch_size=3, epoch=1000, dir_base=directory_base, n_classes=5)
         #acc, matrix, language_model = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
-        #acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
+        acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
         accuracy_list.append(acc)
         df = pd.DataFrame(matrix)
