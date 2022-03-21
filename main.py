@@ -29,7 +29,7 @@ if __name__ == '__main__':
     for seed in seeds:
         #acc, matrix, language_model = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
-        error = teacher_student_train(seed=seed, batch_size=3, epoch=100, dir_base=directory_base, n_classes=5)
+        error = teacher_student_train(seed=seed, batch_size=3, epoch=500, dir_base=directory_base, n_classes=5)
 
         acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=25, dir_base=directory_base, n_classes=5)
 
