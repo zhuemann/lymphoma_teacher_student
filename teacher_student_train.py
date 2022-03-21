@@ -177,6 +177,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     #scheduler = MultiStepLR(optimizer, milestones=[1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 20, 30], gamma=0.9)
     scheduler = MultiStepLR(optimizer, milestones=[25, 50, 100, 200, 300], gamma=0.95)
 
+    epoch_avg_loss = 1000
     best_acc = -1
     for epoch in range(1, N_EPOCHS + 1):
         model_obj.train()
@@ -214,9 +215,11 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         #test = np.asarray(loss_list)
         #print(test)
         #print(type(test))
-
-        print(f"average loss: {np.mean(np.asarray(loss_list))}")
+        epoch_avg_loss = np.mean(np.asarray(loss_list))
+        print(f"average loss: {epoch_avg_loss}")
 
     save_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model')
     # torch.save(model_obj.state_dict(), '/home/zmh001/r-fcb-isilon/research/Bradshaw/Zach_Analysis/models/vit/best_multimodal_modal')
     torch.save(model_obj.state_dict(), save_path)
+
+    return epoch_avg_loss

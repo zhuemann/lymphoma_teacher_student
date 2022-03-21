@@ -24,11 +24,12 @@ if __name__ == '__main__':
     #seeds = [117, 295, 714, 892, 1023, 2756, 3425]
     accuracy_list = []
     seeds = [117]
+    error = 1000
 
     for seed in seeds:
         #acc, matrix, language_model = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
-        teacher_student_train(seed=seed, batch_size=3, epoch=50, dir_base=directory_base, n_classes=5)
+        error = teacher_student_train(seed=seed, batch_size=3, epoch=50, dir_base=directory_base, n_classes=5)
 
         acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
@@ -43,5 +44,6 @@ if __name__ == '__main__':
         print(accuracy_list)
     print(np.mean(np.asarray(accuracy_list)))
     print(np.std(np.asarray(accuracy_list)))
+    print(f"average epoch loss in pretraining: {error}")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
