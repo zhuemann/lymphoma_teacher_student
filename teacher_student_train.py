@@ -153,7 +153,7 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
 
 
     language_model = BERTClass(roberta_model, n_class=N_CLASS, n_nodes=latient_layer)
-    language_path = os.path.join(dir_base, 'Zach_Analysis/models/language_teacher_model')
+    language_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/language_teacher_model')
 
     language_model.load_state_dict(torch.load(language_path))
 
