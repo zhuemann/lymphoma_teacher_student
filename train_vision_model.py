@@ -192,15 +192,19 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     #vis_model = Vision_Model(n_classes=N_CLASS, n_latient=768, pretrained=True, dir_base=dir_base)
 
 
-    #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
+    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
     #model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/efficientnet-b0')
-    model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/pretrained_student_vision_model_1000ep')
 
     #torch.save(vis_model.state_dict(), model_path)
-    vis_model = EfficientNet.from_name('efficientnet-b0')
-    vis_model = Vision_Model(model=vis_model, n_latient=1000, n_classes=768, pretrained=False)
-    vis_model.load_state_dict(torch.load(model_path))
-    vis_model = Vision_Model(model=vis_model, n_latient=768, n_classes=5, pretrained=False)
+
+    use_1000ep_model = False
+    if use_1000ep_model:
+        model_path = os.path.join(dir_base,
+                                  'Zach_Analysis/models/teacher_student/pretrained_student_vision_model_1000ep')
+        vis_model = EfficientNet.from_name('efficientnet-b0')
+        vis_model = Vision_Model(model=vis_model, n_latient=1000, n_classes=768, pretrained=False)
+        vis_model.load_state_dict(torch.load(model_path))
+        vis_model = Vision_Model(model=vis_model, n_latient=768, n_classes=5, pretrained=False)
 
     #model.fc = nn.Linear(1000, 5)
     #vis_model = model
