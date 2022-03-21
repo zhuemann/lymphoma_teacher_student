@@ -143,10 +143,9 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
         vis_model = Vision_Model(model = vis_model, n_latient = 1000, n_classes= 768, pretrained=False)
     else:
         print("using pretrained efficientnet-b0")
-        #vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=1000)  # num_classes=2
-        #vis_model = Vision_Model(model=vis_model, n_latient=1000, n_classes=768, pretrained=False)
-        vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=768)  # num_classes=2
-        #vis_model = Vision_Model(model=vis_model, n_latient=1000, n_classes=768, pretrained=False)
+        vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=1000)  # num_classes=2
+        vis_model = Vision_Model(model=vis_model, n_latient=1000, n_classes=768, pretrained=False)
+
 
     # creates the language model which gets passed to the multimodal model class
 
