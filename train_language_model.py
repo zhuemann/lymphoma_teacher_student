@@ -250,7 +250,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
             targets = data['targets'].to(device, dtype=torch.long)
             #images = data['images'].to(device)
 
-            outputs = model_obj(ids, mask, token_type_ids)
+            outputs, pooler = model_obj(ids, mask, token_type_ids)
 
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())
@@ -304,7 +304,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
                 targets = data['targets'].to(device, dtype=torch.long)
                 images = data['images'].to(device)
 
-                outputs = model_obj(ids, mask, token_type_ids)
+                outputs, pooler = model_obj(ids, mask, token_type_ids)
 
                 fin_targets.extend(targets.cpu().detach().numpy().tolist())
                 fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
@@ -359,7 +359,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
             targets = data['targets'].to(device, dtype=torch.long)
             images = data['images'].to(device)
 
-            outputs = model_obj(ids, mask, token_type_ids)
+            outputs, pooler = model_obj(ids, mask, token_type_ids)
             row_ids.extend(data['row_ids'])
             fin_targets.extend(targets.cpu().detach().numpy().tolist())
             fin_outputs.extend(torch.sigmoid(outputs).cpu().detach().numpy().tolist())  # for two class
