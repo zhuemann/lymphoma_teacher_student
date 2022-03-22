@@ -31,7 +31,7 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
     IMG_SIZE = 384
     # IMG_SIZE = 600
     BATCH_SIZE = batch_size
-    LR = 8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
+    LR = 1e-6 #8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
     GAMMA = 0.7
     N_EPOCHS = epoch  # 8
     N_CLASS = n_classes
@@ -63,8 +63,8 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
     # creates the path to the roberta model used from the bradshaw drive and loads the tokenizer and roberta model
     # roberta_path = os.path.join(dir_base, 'Zach_Analysis/roberta_large/')
     # using bert for now
-    roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
-    # roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bio_clinical_bert/')
+    # roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
+    roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bio_clinical_bert/')
 
     tokenizer = AutoTokenizer.from_pretrained(roberta_path)
     # roberta_model = RobertaModel.from_pretrained(roberta_path)
@@ -198,16 +198,16 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
 
 
 
-    for index, param in enumerate(vis_model.parameters()):
+    #for index, param in enumerate(vis_model.parameters()):
         #print(param.size())
-        param.requires_grad = False
+    #    param.requires_grad = False
         #print(index)
-        if index < 3:
-            param.require_grad = True
+    #    if index < 3:
+    #        param.require_grad = True
 
-    for name, child in vis_model.named_children():
-        for x, y in child.named_children():
-            print(name, x)
+    #for name, child in vis_model.named_children():
+    #    for x, y in child.named_children():
+    #        print(name, x)
 
     #print(vis_model)
     #print(vis_model._blocks)
