@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     seeds = [117, 295, 714, 892, 1023, 2756, 3425]
     accuracy_list = []
-    seeds = [295]
+    seeds = [714]
     error = 1000
 
     for seed in seeds:
