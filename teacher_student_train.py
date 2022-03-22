@@ -65,8 +65,8 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     # creates the path to the roberta model used from the bradshaw drive and loads the tokenizer and roberta model
     #roberta_path = os.path.join(dir_base, 'Zach_Analysis/roberta_large/')
     # using bert for now
-    roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
-    #roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bio_clinical_bert/')
+    #roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bert/')
+    roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/bio_clinical_bert/')
     #roberta_path = os.path.join(dir_base, 'Zach_Analysis/models/roberta_pretrained_v4/')
 
     tokenizer = AutoTokenizer.from_pretrained(roberta_path)
