@@ -21,9 +21,9 @@ if __name__ == '__main__':
         #directory_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"
         directory_base = "/UserData/"
 
-    #seeds = [117, 295, 714, 892, 1023, 2756, 3425]
+    seeds = [117, 295, 714, 892, 1023, 2756, 3425]
     accuracy_list = []
-    seeds = [117]
+    #seeds = [117]
     error = 1000
 
     for seed in seeds:
