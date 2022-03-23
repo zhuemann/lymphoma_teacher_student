@@ -192,7 +192,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     #vis_model = Vision_Model(n_classes=N_CLASS, n_latient=768, pretrained=True, dir_base=dir_base)
 
 
-    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=5)
+    vis_model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=1000)
     #model_path = os.path.join(dir_base, 'Zach_Analysis/models/teacher_student/efficientnet-b0')
 
     #torch.save(vis_model.state_dict(), model_path)
