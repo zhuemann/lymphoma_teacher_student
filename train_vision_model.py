@@ -31,7 +31,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
     IMG_SIZE = 384
     # IMG_SIZE = 600
     BATCH_SIZE = batch_size
-    LR = 8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
+    LR = 1e-5 #8e-5  # 1e-4 was for efficient #1e-06 #2e-6 1e-6 for transformer 1e-4 for efficientnet
     GAMMA = 0.7
     N_EPOCHS = epoch  # 8
     N_CLASS = n_classes
@@ -98,6 +98,8 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
 
     # test_df.to_excel(save_filepath, index=False)
     # print("after save")
+    # save_filepath = os.path.join(dir_base, '/Zach_Analysis/lymphoma_data/test_vision_df.xlsx')
+    # test_df.to_excel(save_filepath, index=True)
 
     # create image augmentations
     transforms_train = transforms.Compose(
@@ -364,8 +366,8 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
             accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
             print(f"valid Hamming Score = {val_hamming_score}\nValid Accuracy = {accuracy}")
 
-            print(f"Epoch {str(epoch)}, Validation Hamming Score = {val_hamming_score}")
-            print(f"Epoch {str(epoch)}, Validation Hamming Loss = {val_hamming_loss}")
+            print(f"Epoch {str(epoch)}, Vision Validation Hamming Score = {val_hamming_score}")
+            print(f"Epoch {str(epoch)}, Vision Validation Hamming Loss = {val_hamming_loss}")
             print(confusion_matrix)
             if accuracy >= best_acc:
                 best_acc = accuracy
@@ -412,7 +414,7 @@ def train_vision_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-fcb
 
         test_hamming_score = hamming_score(np.array(fin_targets), np.array(final_outputs))
         accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
-        print(f"Test Hamming Score = {test_hamming_score}\nTest Accuracy = {accuracy}")
+        print(f"Test Vision Hamming Score = {test_hamming_score}\nTest Vision Accuracy = {accuracy}")
         print(confusion_matrix)
 
         return accuracy, confusion_matrix

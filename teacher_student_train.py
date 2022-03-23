@@ -87,9 +87,9 @@ def teacher_student_train(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-
     )
 
 
-    # save_filepath = os.path.join(dir_base, '/UserData/Zach_Analysis/Redacted_Reports/petlymph_names.xlsx')
+    # save_filepath = os.path.join(dir_base, '/Zach_Analysis/lymphoma_data/test_teacher_student_df.xlsx')
+    # test_df.to_excel(save_filepath, index=True)
 
-    # test_df.to_excel(save_filepath, index=False)
     # print("after save")
 
     # create image augmentations

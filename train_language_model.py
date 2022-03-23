@@ -82,6 +82,9 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
         test_valid_df, test_size=0.5, random_state=seed, stratify=test_valid_df.label.values
     )
 
+    # save_filepath = os.path.join(dir_base, '/Zach_Analysis/lymphoma_data/test_language_df.xlsx')
+    # test_df.to_excel(save_filepath, index=True)
+
     # save_filepath = os.path.join(dir_base, '/UserData/Zach_Analysis/Redacted_Reports/petlymph_names.xlsx')
 
     # test_df.to_excel(save_filepath, index=False)
@@ -333,8 +336,8 @@ def train_language_model(seed, batch_size=8, epoch=1, dir_base="/home/zmh001/r-f
             accuracy = accuracy_score(np.array(fin_targets), np.array(final_outputs))
             print(f"valid Hamming Score = {val_hamming_score}\nValid Accuracy = {accuracy}")
 
-            print(f"Epoch {str(epoch)}, Validation Hamming Score = {val_hamming_score}")
-            print(f"Epoch {str(epoch)}, Validation Hamming Loss = {val_hamming_loss}")
+            print(f"Epoch {str(epoch)}, Language Validation Hamming Score = {val_hamming_score}")
+            print(f"Epoch {str(epoch)}, Language Validation Hamming Loss = {val_hamming_loss}")
             print(confusion_matrix)
             if accuracy >= best_acc:
                 best_acc = accuracy
