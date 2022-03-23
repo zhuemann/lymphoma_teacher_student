@@ -21,15 +21,15 @@ if __name__ == '__main__':
         #directory_base = "/home/zmh001/r-fcb-isilon/research/Bradshaw/"
         directory_base = "/UserData/"
 
-    seeds = [295, 714, 892, 1023, 2756, 3425]
+    seeds = [117, 295, 714, 892, 1023, 2756, 3425]
     accuracy_list = []
     #seeds = [295]
     error = 1000
 
     for seed in seeds:
-        acc, matrix = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
+        #acc, matrix = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
-        error = teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
+        #error = teacher_student_train(seed=seed, batch_size=3, epoch=10, dir_base=directory_base, n_classes=5)
 
         acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=25, dir_base=directory_base, n_classes=5)
 
