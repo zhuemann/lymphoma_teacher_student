@@ -29,7 +29,7 @@ if __name__ == '__main__':
     for seed in seeds:
         acc, matrix = train_language_model(seed=seed, batch_size=3, epoch=20, dir_base=directory_base, n_classes=5)
 
-        error = teacher_student_train(seed=seed, batch_size=3, epoch= 50, dir_base=directory_base, n_classes=5)
+        error = teacher_student_train(seed=seed, batch_size=3, epoch= 100, dir_base=directory_base, n_classes=5)
 
         acc, matrix = train_vision_model(seed=seed, batch_size=3, epoch=25, dir_base=directory_base, n_classes=5)
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         df = pd.DataFrame(matrix)
 
         ## save to xlsx file
-        filepath = os.path.join(directory_base, '/UserData/Zach_Analysis/result_logs_teacher_student/bio_bert_50ep/confusion_matrix_seed' + str(seed) + '.xlsx')
+        filepath = os.path.join(directory_base, '/UserData/Zach_Analysis/result_logs_teacher_student/bio_bert_100ep/confusion_matrix_seed' + str(seed) + '.xlsx')
 
         df.to_excel(filepath, index=False)
 
